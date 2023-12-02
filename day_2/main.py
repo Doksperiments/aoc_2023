@@ -55,13 +55,19 @@ def check_limit(line: tuple[int, tuple[int, int, int]]) -> bool:
 
     return (line[1][0] <= RED_LIMIT) and (line[1][1] <= GREEN_LIMIT) and (line[1][2] <= BLUE_LIMIT)
 
+def calculate_power(line: tuple[int, tuple[int, int, int]]) -> int:
+    return line[1][0] * line[1][1] * line[1][2]
 
 if __name__ == "__main__":
-    total: int = 0
+    total_one: int = 0
+    total_two: int = 0
+
     with open("day_2/input.txt", "r") as f:
         for line in f.readlines():
             line = format_line(line)
             line = filter_max(line)
-            total += check_limit(line) * line[0]
+            total_one += check_limit(line) * line[0]
+            total_two += calculate_power(line)
 
-    print(total)
+    print("Part 1:", total_one)
+    print("Part 2:", total_two)
