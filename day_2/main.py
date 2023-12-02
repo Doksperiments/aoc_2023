@@ -4,9 +4,6 @@ RED_LIMIT: int = 12
 GREEN_LIMIT: int = 13
 BLUE_LIMIT: int = 14
 
-fmt_line: dict[int, list[dict[str, int]]] = dict()
-
-
 def format_line(line: str) -> tuple[int, list[dict[str, int]]]:
 
     index: int
@@ -33,7 +30,7 @@ def format_line(line: str) -> tuple[int, list[dict[str, int]]]:
         values_list.append(values)
         values = dict()
 
-    fmt_line = (index, values_list)
+    fmt_line: tuple[int, list[dict[str, int]]] = (index, values_list)
     return fmt_line
 
 def filter_max(line: tuple[int, list[dict[str, int]]]) -> tuple[int, tuple[int, int, int]]:
