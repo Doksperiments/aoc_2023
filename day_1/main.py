@@ -79,10 +79,31 @@ def extract_calibration(line: str) -> int:
     return digit
 
 
+def extract_digit(line: str) -> int:
+
+    digit: int = 0
+
+    for ch in line:
+        if (ch >= '0' and ch <= '9'):
+            digit += 10 * int(ch)
+            break
+
+    for ch in line[::-1]:
+        if (ch >= '0' and ch <= '9'):
+            digit += int(ch)
+            break
+
+    return digit
+
+
 if __name__ == "__main__":
-    total: int = 0
+    total_one: int = 0
+    total_two: int = 0
+
     with open("day_1/input.txt", "r") as f:
         for line in f.readlines():
-            total += extract_calibration(line)
+            total_one += extract_digit(line)
+            total_two += extract_calibration(line)
 
-        print(total)
+    print("Part 1:", total_one)
+    print("Part 2:", total_two)
