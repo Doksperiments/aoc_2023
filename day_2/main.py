@@ -7,18 +7,18 @@ BLUE_LIMIT: int = 14
 fmt_line: dict[int, list[dict[str, int]]] = dict()
 
 
-def format_line(line: str) -> dict[int, list[dict[str, int]]]:
+def format_line(line: str) -> tuple[int, list[dict[str, int]]]:
 
     index: int
     search: re.Match[str] | None
     values: dict[str, int] = dict()
+    values_list: list[dict[str, int]] = list()
 
     if search := re.search("Game ([0-9]+):", line):
         index = int(search.group(1))
     else:
         raise ValueError("No game index found")
     
-    fmt_line[index] = list()
 
     for group in line.split(": ")[1].split("; "):
 
@@ -30,29 +30,27 @@ def format_line(line: str) -> dict[int, list[dict[str, int]]]:
             if search := re.search("([0-9]+) blue", pair):
                 values["blue"] = int(search.group(1)) if search.group(1) else 0
 
-        fmt_line[index].append(values)
+        values_list.append(values)
         values = dict()
 
+    fmt_line = (index, values_list)
     return fmt_line
 
-def filter_max(line: dict[int, list[dict[str, int]]]) -> tuple[int, tuple[int, int, int]]:
+def filter_max(line: tuple[int, list[dict[str, int]]]) -> tuple[int, tuple[int, int, int]]:
 
-    filtered_list: tuple[int, tuple[int, int, int]]
+    red_max: int = 0
+    green_max: int = 0
+    blue_max: int = 0
 
-    for index in line.keys():
-        red_max: int = 0
-        green_max: int = 0
-        blue_max: int = 0
+    for pairs in line[1]:
+        if "red" in pairs.keys():
+            red_max = max(pairs["red"], red_max)
+        if "green" in pairs.keys():
+            green_max = max(pairs["green"], green_max)
+        if "blue" in pairs.keys():
+            blue_max = max(pairs["blue"], blue_max)
 
-        for pairs in line[index]:
-            if "red" in pairs.keys():
-                red_max = max(pairs["red"], red_max)
-            if "green" in pairs.keys():
-                green_max = max(pairs["green"], green_max)
-            if "blue" in pairs.keys():
-                blue_max = max(pairs["blue"], blue_max)
-
-        filtered_list = (index, (red_max, green_max, blue_max))
+    filtered_list: tuple[int, tuple[int, int, int]] = (line[0], (red_max, green_max, blue_max))
 
     return filtered_list
 
