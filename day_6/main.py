@@ -30,6 +30,8 @@ if __name__ == "__main__":
     times: list[int]
     distances: list[int]
     ways: int = 1
+    big_time: int
+    big_distance: int
 
     with open("day_6/input.txt", "r") as f:
         times = get_line_values(f.readline())
@@ -38,4 +40,8 @@ if __name__ == "__main__":
     for (time, distance) in zip(times, distances):
         ways *= filter_records(calculate_charges(time), distance)
 
+    big_time = int("".join(str(time) for time in times))
+    big_distance = int("".join(str(distance) for distance in distances))
+
     print("Part 1:", ways)
+    print("Part 2:", filter_records(calculate_charges(big_time), big_distance))
