@@ -5,12 +5,20 @@ def split_line(line: str) -> list[int]:
     return [int(num) for num in line.split(' ')]
 
 
-def extrapolate_value(values: list[int]) -> int:
+def extrapolate_right(values: list[int]) -> int:
 
-    if sum(values) == 0:    # All elements must be 0 since they can't be < 0
+    if all(value == 0 for value in values):
         return 0
     else:
-        return values[-1] + extrapolate_value([right - left for left, right in zip(values, values[1:])])
+        return values[-1] + extrapolate_right([right - left for left, right in zip(values, values[1:])])
+
+
+def extrapolate_left(values: list[int]) -> int:
+
+    if all(value == 0 for value in values):
+        return 0
+    else:
+        return values[0] - extrapolate_left([right - left for left, right in zip(values, values[1:])])
 
 
 if __name__ == "__main__":
@@ -20,5 +28,5 @@ if __name__ == "__main__":
     with open("day_9/input.txt", "r") as f:
         lines = f.readlines()
 
-
-    print("Part 1:", sum([extrapolate_value(split_line(line)) for line in lines]))
+    print("Part 1:", sum([extrapolate_right(split_line(line)) for line in lines]))
+    print("Part 2:", sum([extrapolate_left(split_line(line)) for line in lines]))
